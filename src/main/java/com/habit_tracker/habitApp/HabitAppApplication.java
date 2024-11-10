@@ -9,5 +9,5 @@ public class HabitAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HabitAppApplication.class, args);
 	}
-
+	
 }
