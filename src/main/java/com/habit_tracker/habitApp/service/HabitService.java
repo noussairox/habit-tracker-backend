@@ -1,5 +1,7 @@
 package com.habit_tracker.habitApp.service;
 
+import com.habit_tracker.habitApp.dto.HabitStatisticsDTO;
+import com.habit_tracker.habitApp.dto.ProgressChartDTO;
 import com.habit_tracker.habitApp.model.Habit;
 import com.habit_tracker.habitApp.model.User;
 import com.habit_tracker.habitApp.repository.HabitRepository;
@@ -101,5 +103,53 @@ public class HabitService {
             return habitRepository.findByUserIdAndFrequency(user.getId(), frequency);
         }
         return habitRepository.findByUserId(user.getId());
+    }
+
+    public Habit getHabitById(Long id) {
+        return habitRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Habit not found with ID: " + id));
+    }
+    
+    public HabitStatisticsDTO getHabitStatistics() {
+        // Récupérer l'utilisateur connecté
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        // Récupérer les habitudes de l'utilisateur
+        List<Habit> habits = habitRepository.findByUserId(user.getId());
+
+        // Calcul des statistiques
+        int totalHabits = habits.size();
+        int activeHabits = (int) habits.stream().filter(Habit::isActive).count();
+        int inactiveHabits = totalHabits - activeHabits;
+        int bestStreak = habits.stream()
+                .mapToInt(Habit::getBestStreak)
+                .max()
+                .orElse(0); // Valeur par défaut si aucune habitude n'existe
+
+        return new HabitStatisticsDTO(totalHabits, activeHabits, inactiveHabits, bestStreak);
+    }
+
+    /**
+     * Calculer les statistiques de progression pour l'utilisateur connecté
+     */
+    public ProgressChartDTO getProgressStatistics() {
+        // Récupérer l'utilisateur connecté
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        // Récupérer toutes les habitudes de l'utilisateur
+        List<Habit> habits = habitRepository.findByUserId(user.getId());
+
+        // Calculer les habitudes complétées et restantes
+        int completedHabits = (int) habits.stream()
+                .filter(habit -> habit.getCompletionDates().size() >= habit.getTargetCount())
+                .count();
+        int remainingHabits = habits.size() - completedHabits;
+
+        // Retourner les statistiques
+        return new ProgressChartDTO(completedHabits, remainingHabits);
     }
 }

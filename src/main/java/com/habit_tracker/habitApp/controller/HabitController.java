@@ -1,5 +1,7 @@
 package com.habit_tracker.habitApp.controller;
 
+import com.habit_tracker.habitApp.dto.HabitStatisticsDTO;
+import com.habit_tracker.habitApp.dto.ProgressChartDTO;
 import com.habit_tracker.habitApp.model.Habit;
 import com.habit_tracker.habitApp.service.HabitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +26,23 @@ public class HabitController {
         return habitService.createHabit(habit);
     }
 
+    @GetMapping("/{id}")
+    public Habit getHabitById(@PathVariable Long id) {
+        return habitService.getHabitById(id);
+    }
+
+    
     @PutMapping("/{id}")
     public Habit updateHabit(@PathVariable Long id, @RequestBody Habit updatedHabit) {
         return habitService.updateHabit(id, updatedHabit);
     }
 
+    
     @PutMapping("/{id}/toggleStatus")
     public Habit toggleHabitStatus(@PathVariable Long id) {
         return habitService.toggleHabitStatus(id);
     }
+    
 
     @PutMapping("/{id}/complete")
     public Habit markHabitAsCompleted(@PathVariable Long id, @RequestBody LocalDate completionDate) {
@@ -57,5 +67,15 @@ public class HabitController {
     @DeleteMapping("/{id}")
     public void deleteHabit(@PathVariable Long id) {
         habitService.deleteHabit(id);
+    }
+    
+    @GetMapping("/statistics")
+    public HabitStatisticsDTO getHabitStatistics() {
+        return habitService.getHabitStatistics();
+    }
+    
+    @GetMapping("/progress-statistics")
+    public ProgressChartDTO getProgressStatistics() {
+        return habitService.getProgressStatistics();
     }
 }
