@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +33,7 @@ public class Habit {
 	//status pour activer/desactiver l'habititude
 	private boolean isActive;
 	
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.LAZY)
 	private List<LocalDate> completionDates;
 	
 	private LocalDate startDate;  // Date de début de l'habitude

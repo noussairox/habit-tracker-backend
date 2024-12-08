@@ -12,4 +12,5 @@ public class HabitStatisticsDTO {
     private int activeHabits;
     private int inactiveHabits;
     private int bestStreak;
+    private int archivedHabits;
 }

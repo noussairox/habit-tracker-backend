@@ -2,8 +2,10 @@ package com.habit_tracker.habitApp.service;
 
 import com.habit_tracker.habitApp.dto.HabitStatisticsDTO;
 import com.habit_tracker.habitApp.dto.ProgressChartDTO;
+import com.habit_tracker.habitApp.model.ArchivedHabit;
 import com.habit_tracker.habitApp.model.Habit;
 import com.habit_tracker.habitApp.model.User;
+import com.habit_tracker.habitApp.repository.ArchivedHabitRepository;
 import com.habit_tracker.habitApp.repository.HabitRepository;
 import com.habit_tracker.habitApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class HabitService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ArchivedHabitRepository archivedHabitRepository;
     /**
      * Créer une habitude associée à l'utilisateur authentifié
      */
@@ -127,8 +131,11 @@ public class HabitService {
                 .mapToInt(Habit::getBestStreak)
                 .max()
                 .orElse(0); // Valeur par défaut si aucune habitude n'existe
-
-        return new HabitStatisticsDTO(totalHabits, activeHabits, inactiveHabits, bestStreak);
+        
+     // Calcul du total des habitudes archivées
+        int archivedHabits = archivedHabitRepository.findAll().size();
+        
+        return new HabitStatisticsDTO(totalHabits, activeHabits, inactiveHabits, bestStreak,archivedHabits);
     }
 
     /**
@@ -142,14 +149,71 @@ public class HabitService {
 
         // Récupérer toutes les habitudes de l'utilisateur
         List<Habit> habits = habitRepository.findByUserId(user.getId());
+        int archivedHabits = archivedHabitRepository.findAll().size();
 
-        // Calculer les habitudes complétées et restantes
-        int completedHabits = (int) habits.stream()
-                .filter(habit -> habit.getCompletionDates().size() >= habit.getTargetCount())
-                .count();
-        int remainingHabits = habits.size() - completedHabits;
+        // Calculer les habitudes restantes (actives + inactives)
+        int totalHabits = habits.size();
+        int remainingHabits = totalHabits;
 
-        // Retourner les statistiques
-        return new ProgressChartDTO(completedHabits, remainingHabits);
+        // Retourner les statistiques avec les archivées
+        return new ProgressChartDTO(archivedHabits, remainingHabits);
     }
+
+    
+    public Habit updateHabitStreak(Long habitId) {
+        Habit habit = habitRepository.findById(habitId)
+                .orElseThrow(() -> new RuntimeException("Habit not found"));
+
+        // Mettre à jour le streak actuel et le meilleur streak
+        habit.setCurrentStreak(habit.getCurrentStreak() + 1);
+        if (habit.getCurrentStreak() > habit.getBestStreak()) {
+            habit.setBestStreak(habit.getCurrentStreak());
+        }
+
+        habit = habitRepository.save(habit);
+
+        // Vérifier et archiver l'habitude si elle atteint son objectif
+        checkAndArchiveHabit(habitId);
+
+        return habit;
+    }
+
+    
+    public void checkAndArchiveHabit(Long habitId) {
+        Habit habit = habitRepository.findById(habitId)
+                .orElseThrow(() -> new RuntimeException("Habit not found"));
+
+        System.out.println("Vérification pour archivage de l'habitude : " + habit.getName());
+        System.out.println("Streak Actuel : " + habit.getCurrentStreak());
+        System.out.println("Objectif : " + habit.getTargetCount());
+
+        // Vérifiez si le streak actuel atteint ou dépasse l'objectif
+        if (habit.getCurrentStreak() >= habit.getTargetCount()) {
+            System.out.println("Archiver l'habitude : " + habit.getName());
+
+            // Créer une copie de l'habitude dans ArchivedHabit
+            ArchivedHabit archivedHabit = new ArchivedHabit(
+                    null, // L'ID sera généré automatiquement
+                    habit.getName(),
+                    habit.getDescription(),
+                    habit.getFrequency(),
+                    habit.getStartDate(),
+                    habit.getEndDate(),
+                    habit.getTargetCount(),
+                    habit.getBestStreak(),
+                    LocalDate.now() // Date d'archivage
+            );
+            archivedHabitRepository.save(archivedHabit);
+
+            // Supprimez l'habitude de la table des habitudes actives
+            habitRepository.delete(habit);
+            System.out.println("Habitude archivée et supprimée des actives.");
+        } else {
+            System.out.println("L'habitude n'a pas encore atteint son objectif.");
+        }
+    }
+
+    
+    
+
 }

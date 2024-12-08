@@ -17,17 +17,16 @@ import com.habit_tracker.habitApp.repository.NotificationRepository;
 @Service
 public class NotificationService {
 
-    // Création d'un logger pour enregistrer des messages de débogage
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
     @Autowired
     private HabitRepository habitRepository;
-    
+
     @Autowired
     private NotificationRepository notificationRepository;
 
     // Tâche planifiée pour s'exécuter chaque minute
-    @Scheduled(cron = "0 0 * * * *")  // Exécution chaque minute pour les tests
+    @Scheduled(cron = "0 */1 * * * *") // Exécution chaque minute pour les tests
     public void sendNotifications() {
         logger.info("Exécution de sendNotifications à : " + LocalDateTime.now());
 
@@ -38,7 +37,7 @@ public class NotificationService {
         for (Notification notification : notifications) {
             Habit habit = notification.getHabit();
 
-            // Simulez l'envoi de la notification
+            // Simulez l'envoi de la notification (par ex., par email ou push)
             logger.info("Envoi de la notification pour l'habitude : " + habit.getName());
             logger.info("Message : " + notification.getMessage());
 
@@ -47,11 +46,25 @@ public class NotificationService {
             notificationRepository.save(notification);
 
             logger.info("Notification marquée comme envoyée pour : " + habit.getName());
+
+            // Créer la prochaine notification pour cette habitude
+            createNotificationForHabit(habit);
         }
     }
 
     // Méthode pour créer des rappels pour les habitudes
     public void createNotificationForHabit(Habit habit) {
+        // Vérifier s'il existe déjà une notification non envoyée pour cette habitude
+        boolean existingNotification = notificationRepository
+            .findByIsSentFalseAndNotificationTimeBefore(LocalDateTime.now())
+            .stream()
+            .anyMatch(n -> n.getHabit().getId().equals(habit.getId()));
+
+        if (existingNotification) {
+            logger.info("Une notification existe déjà pour l'habitude : " + habit.getName());
+            return;
+        }
+
         logger.info("Création d'une notification pour l'habitude : " + habit.getName());
         LocalDateTime nextNotificationTime = calculateNextNotificationTime(habit);
         logger.info("Heure du prochain rappel : " + nextNotificationTime);
@@ -67,17 +80,25 @@ public class NotificationService {
         logger.info("Notification créée et enregistrée pour l'habitude : " + habit.getName());
     }
 
-
     // Méthode pour calculer la prochaine heure de rappel en fonction de la fréquence
     private LocalDateTime calculateNextNotificationTime(Habit habit) {
         LocalDateTime now = LocalDateTime.now();
-        switch (habit.getFrequency().toLowerCase()) {
-            case "quotidien":
-                return now.plusMinutes(1);  // Pour tester, envoyer chaque minute
+        switch (habit.getFrequency()) {
+            case "quotidienne":
+                return now.plusMinutes(1); // Rappel toutes les minutes pour les tests
             case "hebdomadaire":
-                return now.plusWeeks(1);
+                return now.plusMinutes(1); // Rappel toutes les minutes pour les tests
             default:
-                return now.plusMinutes(1);  // Par défaut, utiliser chaque minute pour les tests
+                return now.plusMinutes(1); // Par défaut, rappel toutes les minutes pour les tests
         }
+    }
+
+    // Méthode pour créer des notifications initiales pour toutes les habitudes
+    public void initializeNotificationsForAllHabits() {
+        List<Habit> habits = habitRepository.findAll();
+        for (Habit habit : habits) {
+            createNotificationForHabit(habit);
+        }
+        logger.info("Notifications initiales créées pour toutes les habitudes.");
     }
 }
