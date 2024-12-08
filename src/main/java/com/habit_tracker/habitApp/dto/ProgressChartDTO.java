@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProgressChartDTO {
-    private int completedHabits;
+    private int archivedHabits;
     private int remainingHabits;
 }

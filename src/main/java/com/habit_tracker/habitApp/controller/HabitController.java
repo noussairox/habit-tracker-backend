@@ -2,7 +2,9 @@ package com.habit_tracker.habitApp.controller;
 
 import com.habit_tracker.habitApp.dto.HabitStatisticsDTO;
 import com.habit_tracker.habitApp.dto.ProgressChartDTO;
+import com.habit_tracker.habitApp.model.ArchivedHabit;
 import com.habit_tracker.habitApp.model.Habit;
+import com.habit_tracker.habitApp.repository.ArchivedHabitRepository;
 import com.habit_tracker.habitApp.service.HabitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,10 @@ public class HabitController {
 
     @Autowired
     private HabitService habitService;
+    
+    @Autowired
+    private ArchivedHabitRepository archivedHabitRepository;
+
 
     @PostMapping
     public Habit createHabit(@RequestBody Habit habit) {
@@ -78,4 +84,20 @@ public class HabitController {
     public ProgressChartDTO getProgressStatistics() {
         return habitService.getProgressStatistics();
     }
+    @PutMapping("/{id}/update-streak")
+    public Habit updateHabitStreak(@PathVariable Long id) {
+        return habitService.updateHabitStreak(id);
+    }
+    
+    @GetMapping("/archived")
+    public List<ArchivedHabit> getArchivedHabits() {
+        return archivedHabitRepository.findAll();
+    }
+
+    @PutMapping("/{id}/archive")
+    public void archiveHabit(@PathVariable Long id) {
+        habitService.checkAndArchiveHabit(id);
+    }
+
+    
 }
