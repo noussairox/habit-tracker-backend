@@ -3,14 +3,14 @@ name: SonarQube
 on:
   push:
     branches:
-      - master  # Analyse uniquement sur la branche principale
+      - main  # Analyse uniquement sur la branche principale
   pull_request:
     types: [opened, synchronize, reopened]  # Analyse également sur les pull requests
 
 jobs:
   build:
     name: Build and analyze
-    runs-on: ubuntu-latest-24.04  # Remplacez par ubuntu-24.04 pour tester la nouvelle version
+    runs-on: ubuntu-24.04  # Remplacez par ubuntu-24.04 pour tester la nouvelle version
     steps:
       # Étape 1 : Cloner le code
       - name: Checkout source code
