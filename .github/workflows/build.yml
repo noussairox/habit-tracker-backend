@@ -1,37 +1,58 @@
 name: SonarQube
+
 on:
   push:
     branches:
-      - master
+      - master  # Analyse uniquement sur la branche principale
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]  # Analyse également sur les pull requests
+
 jobs:
   build:
     name: Build and analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Remplacez par ubuntu-24.04 pour tester la nouvelle version
     steps:
-      - uses: actions/checkout@v4
+      # Étape 1 : Cloner le code
+      - name: Checkout source code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Clone complet pour une analyse précise (important pour Sonar)
+
+      # Étape 2 : Configurer JDK
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'zulu' # Alternative distribution options are available.
+          distribution: 'zulu'  # Vous pouvez aussi utiliser 'temurin'
+
+      # Étape 3 : Mise en cache des packages SonarQube
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
+
+      # Étape 4 : Mise en cache des packages Maven
+      - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      # Étape 5 : Compilation et analyse Sonar
+      - name: Build and analyze with SonarQube
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=noussairorgan_habit-tracker
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token pour récupérer les informations des PR
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Token d'authentification Sonar
+        run: |
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "Error: SONAR_TOKEN is not set. Exiting..."
+            exit 1
+          fi
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -Dsonar.projectKey=noussairorgan_habit-tracker \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.organization=noussairorgan
