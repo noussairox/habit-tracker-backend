@@ -2,12 +2,14 @@ package com.habit_tracker.habitApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-class HabitAppApplicationTests {
+@ActiveProfiles("test") // Active le fichier application-test.properties
+public class HabitAppApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+        // Vérifie que le contexte se charge correctement
+    }
 }
