@@ -2,14 +2,14 @@ package com.habitracker.habitApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test") // Active le fichier application-test.properties
+import com.habittacker.habitApp.HabitAppApplication;
+
+@SpringBootTest(classes = HabitAppApplication.class) // Spécifiez explicitement la classe de configuration principale
 public class HabitAppApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println("Create a TestBranch");
+        // Vérifie si le contexte Spring Boot se charge correctement
     }
 }
