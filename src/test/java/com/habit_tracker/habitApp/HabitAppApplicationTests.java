@@ -10,6 +10,6 @@ public class HabitAppApplicationTests {
 
     @Test
     void contextLoads() {
-        // Vérifie que le contexte se charge correctement
+        System.out.println("Create a TestBranch");
     }
 }
