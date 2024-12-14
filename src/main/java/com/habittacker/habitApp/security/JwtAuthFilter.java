@@ -30,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (token != null && jwtUtils.validateToken(token)) {
                 String username = jwtUtils.getUserNameFromToken(token);
-
+                //Récuperation de username
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         username, null, null); // Add roles if available
 
