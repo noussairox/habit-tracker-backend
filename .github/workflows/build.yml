@@ -3,7 +3,7 @@ name: SonarQube
 on:
   push:
     branches:
-      - master  # Analyse uniquement sur la branche principale
+      - main  # Analyse uniquement sur la branche principale
   pull_request:
     types: [opened, synchronize, reopened]  # Analyse également sur les pull requests
 
