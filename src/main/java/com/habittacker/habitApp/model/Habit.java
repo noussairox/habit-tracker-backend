@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.model;
+package com.habittacker.habitapp.model;
 
 import java.time.LocalDate;
 import java.util.List;

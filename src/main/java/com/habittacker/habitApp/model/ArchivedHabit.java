@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.model;
+package com.habittacker.habitapp.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

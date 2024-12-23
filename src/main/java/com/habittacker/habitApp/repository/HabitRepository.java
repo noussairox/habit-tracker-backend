@@ -1,10 +1,10 @@
-package com.habittacker.habitApp.repository;
+package com.habittacker.habitapp.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.habittacker.habitApp.model.Habit;
+import com.habittacker.habitapp.model.Habit;
 
 public interface HabitRepository extends JpaRepository<Habit, Long> {
 

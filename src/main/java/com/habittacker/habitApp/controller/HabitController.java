@@ -1,11 +1,11 @@
-package com.habittacker.habitApp.controller;
+package com.habittacker.habitapp.controller;
 
-import com.habittacker.habitApp.dto.HabitStatisticsDTO;
-import com.habittacker.habitApp.dto.ProgressChartDTO;
-import com.habittacker.habitApp.model.ArchivedHabit;
-import com.habittacker.habitApp.model.Habit;
-import com.habittacker.habitApp.repository.ArchivedHabitRepository;
-import com.habittacker.habitApp.service.HabitService;
+import com.habittacker.habitapp.dto.HabitStatisticsDTO;
+import com.habittacker.habitapp.dto.ProgressChartDTO;
+import com.habittacker.habitapp.model.ArchivedHabit;
+import com.habittacker.habitapp.model.Habit;
+import com.habittacker.habitapp.repository.ArchivedHabitRepository;
+import com.habittacker.habitapp.service.HabitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
