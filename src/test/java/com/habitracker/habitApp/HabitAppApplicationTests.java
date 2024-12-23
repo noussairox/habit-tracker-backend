@@ -8,7 +8,7 @@ import com.habittacker.habitapp.HabitAppApplication;
 
 @SpringBootTest(classes = HabitAppApplication.class) 
 @ActiveProfiles("test")
-public class HabitAppApplicationTests {
+class HabitAppApplicationTests {
 
     @Test
     void contextLoads() {
