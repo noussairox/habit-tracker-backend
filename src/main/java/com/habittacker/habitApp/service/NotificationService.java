@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.service;
+package com.habittacker.habitapp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.habittacker.habitApp.model.Habit;
-import com.habittacker.habitApp.model.Notification;
-import com.habittacker.habitApp.repository.HabitRepository;
-import com.habittacker.habitApp.repository.NotificationRepository;
+import com.habittacker.habitapp.model.Habit;
+import com.habittacker.habitapp.model.Notification;
+import com.habittacker.habitapp.repository.HabitRepository;
+import com.habittacker.habitapp.repository.NotificationRepository;
 
 @Service
 public class NotificationService {

@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.controller;
+package com.habittacker.habitapp.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.habittacker.habitApp.model.Habit;
-import com.habittacker.habitApp.model.Notification;
-import com.habittacker.habitApp.repository.HabitRepository;
-import com.habittacker.habitApp.repository.NotificationRepository;
-import com.habittacker.habitApp.service.NotificationService;
+import com.habittacker.habitapp.model.Habit;
+import com.habittacker.habitapp.model.Notification;
+import com.habittacker.habitapp.repository.HabitRepository;
+import com.habittacker.habitapp.repository.NotificationRepository;
+import com.habittacker.habitapp.service.NotificationService;
 
 @RestController
 @RequestMapping("api/notif")

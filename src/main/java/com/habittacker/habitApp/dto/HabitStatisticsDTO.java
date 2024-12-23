@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.dto;
+package com.habittacker.habitapp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

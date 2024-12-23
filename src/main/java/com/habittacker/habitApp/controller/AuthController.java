@@ -1,8 +1,8 @@
-package com.habittacker.habitApp.controller;
+package com.habittacker.habitapp.controller;
 
-import com.habittacker.habitApp.model.User;
-import com.habittacker.habitApp.service.AuthService;
-import com.habittacker.habitApp.utils.JwtUtils;
+import com.habittacker.habitapp.model.User;
+import com.habittacker.habitapp.service.AuthService;
+import com.habittacker.habitapp.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

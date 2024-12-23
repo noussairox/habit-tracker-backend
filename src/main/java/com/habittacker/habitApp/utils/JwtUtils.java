@@ -1,4 +1,4 @@
-package com.habittacker.habitApp.utils;
+package com.habittacker.habitapp.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

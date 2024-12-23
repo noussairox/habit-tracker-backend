@@ -1,6 +1,6 @@
-package com.habittacker.habitApp.security;
+package com.habittacker.habitapp.security;
 
-import com.habittacker.habitApp.utils.JwtUtils;
+import com.habittacker.habitapp.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

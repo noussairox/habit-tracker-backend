@@ -1,11 +1,11 @@
-package com.habittacker.habitApp.repository;
+package com.habittacker.habitapp.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.habittacker.habitApp.model.Notification;
+import com.habittacker.habitapp.model.Notification;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long>{
 

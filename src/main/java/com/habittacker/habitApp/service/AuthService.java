@@ -1,7 +1,7 @@
-package com.habittacker.habitApp.service;
+package com.habittacker.habitapp.service;
 
-import com.habittacker.habitApp.model.User;
-import com.habittacker.habitApp.repository.UserRepository;
+import com.habittacker.habitapp.model.User;
+import com.habittacker.habitapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

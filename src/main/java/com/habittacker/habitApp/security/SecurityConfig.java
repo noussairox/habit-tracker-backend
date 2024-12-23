@@ -1,6 +1,6 @@
-package com.habittacker.habitApp.security;
+package com.habittacker.habitapp.security;
 
-import com.habittacker.habitApp.security.JwtAuthFilter;
+import com.habittacker.habitapp.security.JwtAuthFilter;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
